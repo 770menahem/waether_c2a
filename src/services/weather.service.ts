@@ -48,6 +48,8 @@ export class WeatherService implements IWeatherService {
             throw new NotFound('fail to get history search Weather');
         }
 
+        this._logger.logInfo({ message: `history search Weather fetched successfully, ${Weather.length} cities` });
+
         return Weather;
     };
 
@@ -58,6 +60,8 @@ export class WeatherService implements IWeatherService {
             this._logger.logError({ message: 'fail to get last weather' });
             throw new NotFound('fail to get last weather');
         }
+
+        this._logger.logInfo({ message: `last weather fetched successfully with city ${weather.cityName}` });
 
         return weather;
     };
