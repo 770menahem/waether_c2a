@@ -5,11 +5,7 @@ export abstract class BaseRepository<T> {
     public _model: Model<T>;
 
     constructor(db: Connection, modelName: string, schema: Schema<T>) {
-        if (db.modelNames().includes(modelName)) {
-            this._model = db.model(modelName);
-        } else {
-            this._model = db.model<T>(modelName, schema);
-        }
+        this._model = db.model<T>(modelName, schema);
     }
 
     async create(item: T): Promise<T> {

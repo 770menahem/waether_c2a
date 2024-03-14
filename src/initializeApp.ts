@@ -2,35 +2,25 @@ import config from './config/config';
 
 import Logger from './infra/winston/logger';
 import conn from './infra/mongo/initializeMongo';
-import { blogSchema } from './infra/mongo/models/blog.model';
-import { userSchema } from './infra/mongo/models/user.model';
-import { BlogRepo } from './infra/mongo/repo/blog.repo';
-import { UserRepo } from './infra/mongo/repo/user.repo';
-import Auth from './services/auth.service';
-import { BlogService } from './services/blog.service';
-import { UserService } from './services/user.service';
+import { weatherSchema } from './infra/mongo/models/weather.model';
+import { WeatherRepo } from './infra/mongo/repo/weather.repo';
+import { WeatherService } from './services/weather.service';
 import App from './infra/express/app';
-import { BlogController } from './infra/express/controllers/blog.controller';
-import { UserController } from './infra/express/controllers/user.controller';
-import BlogRouter from './infra/express/routers/blog.route';
-import UserRouter from './infra/express/routers/user.route';
+import WeatherRouter from './infra/express/routers/weather.route';
+import { WeatherController } from './infra/express/controllers/weatherController.controller';
+import { WeatherApi } from './infra/api/weather.api';
 
 export function initializeApp(port: any) {
     const logger = new Logger();
 
-    const userRepo = new UserRepo(conn, config.mongo.userCollectionName, userSchema);
-    const blogRepo = new BlogRepo(conn, config.mongo.blogCollectionName, blogSchema);
+    const weatherRepo = new WeatherRepo(conn, config.mongo.weatherCollectionName, weatherSchema);
+    const weatherApi = new WeatherApi();
 
-    const userService = new UserService(userRepo, logger);
-    const blogService = new BlogService(blogRepo, logger);
+    const weatherService = new WeatherService(weatherRepo, weatherApi, logger);
 
-    const userController = new UserController(userService);
-    const blogController = new BlogController(blogService);
+    const weatherController = new WeatherController(weatherService);
 
-    const auth = new Auth(userService.auth);
+    const weatherRouter = new WeatherRouter(weatherController);
 
-    const userRouter = new UserRouter(userController, auth.check);
-    const blogRouter = new BlogRouter(blogController, auth.check);
-
-    return new App(port, [userRouter, blogRouter]);
+    return new App(port, [weatherRouter]);
 }

@@ -9,6 +9,24 @@ export class ServiceError extends Error {
     }
 }
 
+export class NotFound extends ServiceError {
+    constructor(message: string) {
+        super(404, message);
+    }
+}
+
+export class DbFail extends ServiceError {
+    constructor(message: string) {
+        super(500, message);
+    }
+}
+
+export class WeatherNotFound extends ServiceError {
+    constructor(message: string) {
+        super(404, message);
+    }
+}
+
 /**
  * Error middleware, handles the error by the status code.
  * @param { Error } error - The error
@@ -39,6 +57,4 @@ export const errorMiddleware = (error: Error, _req: express.Request, res: expres
             message: error.message,
         });
     }
-
-    console.error(JSON.stringify(error));
 };

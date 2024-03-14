@@ -4,6 +4,9 @@ import { Server } from 'http';
 import * as logger from 'morgan';
 import IRouter from './routers/router.interface';
 import { errorMiddleware } from './utils/error';
+import checkConnections from './utils/checkConnections';
+import { limiter } from './utils/rateLimit';
+import * as apicache from 'apicache';
 
 require('dotenv').config();
 
@@ -33,6 +36,11 @@ class App {
         this.app.use(cors({ origin: '*', credentials: true }));
         this.app.use(express.json());
         this.app.use(express.urlencoded({ extended: true }));
+        this.app.use(limiter);
+
+        const cache = apicache.middleware;
+
+        this.app.use(cache('5 minutes'));
     }
 
     private initializeRouters(): void {

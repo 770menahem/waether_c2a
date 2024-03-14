@@ -4,18 +4,18 @@ import './dotenv';
 const config = {
     server: {
         port: env.get('PORT').required().asPortNumber(),
-        needAuth: env.get('NEED_AUTH').default('true').required().asBool(),
+    },
+    api: {
+        weatherApiUrl: env.get('WEATHER_API_URL').required().asString(),
+    },
+    rateLimit: {
+        windowMs: env.get('RATE_LIMIT_WINDOW_MS').required().asIntPositive(),
+        limit: env.get('RATE_LIMIT_LIMIT').required().asIntPositive(),
     },
     mongo: {
         uri: env.get('MONGO_URI').required().asString(),
-        uriTest: env.get('MONGO_TEST_URI').required().asString(),
-        blogCollectionName: env.get('COLLECTION_NAME').required().asString(),
-        userCollectionName: env.get('USER_COLLECTION_NAME').required().asString(),
-    },
-    keys: {
-        initializationVector: env.get('VECTOR').example('length of 16 456').required().asString(),
-        secretKey: env.get('SECRET_KEY').example('length of 36 45678901234567890123456').required().asString(),
-        tokenKey: env.get('TOKEN_KEY').required().asString(),
+        weatherCollectionName: env.get('WEATHER_COLLECTION_NAME').required().asString(),
+        maxWeatherHistoryCount: env.get('MAX_WEATHER_HISTORY_COUNT').required().asIntPositive(),
     },
 };
 

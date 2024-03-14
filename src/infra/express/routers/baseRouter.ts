@@ -5,9 +5,9 @@ export abstract class BaseRouter<T> {
     public path;
     protected _router = express.Router();
     protected controller: T;
-    public auth: express.RequestHandler;
+    public auth?: express.RequestHandler;
 
-    constructor(controller: T, auth: express.RequestHandler) {
+    constructor(controller: T, auth?: express.RequestHandler) {
         this.controller = controller;
         this.auth = auth;
         this.initializeRoutes();
